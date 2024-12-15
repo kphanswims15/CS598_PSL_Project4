@@ -3,15 +3,19 @@ from streamlit_star_rating import st_star_rating
 import pandas as pd
 import numpy as np
 from PIL import Image
+import requests
+from io import BytesIO
 
-movies_titles = pd.read_csv('https://github.com/kphanswims15/CS598_PSL_Project4/blob/main/ml-1m/movies.dat', sep = '::', engine = 'python',
+movies_titles = pd.read_csv('https://github.com/kphanswims15/CS598_PSL_Project4/raw/refs/heads/main/ml-1m/movies.dat', sep = '::', engine = 'python',
                         encoding = "ISO-8859-1", header = None)
 movies_titles.columns = ['MovieID', 'Title', 'Genres']
 
 def get_movie_details(movie):
     movie_title = movies_titles.loc[movies_titles['MovieID'] == int(movie[1:])]
-    filename = f'MovieImages\\{movie[1:]}.jpg'
-    image = Image.open(filename)
+    url = 'https://github.com/kphanswims15/CS598_PSL_Project4/raw/refs/heads/main/MovieImages/%s.jpg' %movie[1:]
+
+    response = requests.get(url)
+    image = Image.open(BytesIO(response.content))
     title = movie_title['Title'].to_string()
 
     return image, title
@@ -20,8 +24,8 @@ def get_movie_details(movie):
 @st.cache_data
 def load_data():
     # Load the rating matrix and similarity matrix
-    rating_matrix = pd.read_csv("https://github.com/kphanswims15/CS598_PSL_Project4/blob/main/I-w9Wo-HSzmUGNNHw0pCzg_bc290b0e6b3a45c19f62b1b82b1699f1_Rmat.csv?raw=true", index_col=0)
-    similarity_matrix = pd.read_csv("https://github.com/kphanswims15/CS598_PSL_Project4/blob/main/S_matrix.csv?raw=true", index_col=0)
+    rating_matrix = pd.read_csv("https://github.com/kphanswims15/CS598_PSL_Project4/raw/refs/heads/main/I-w9Wo-HSzmUGNNHw0pCzg_bc290b0e6b3a45c19f62b1b82b1699f1_Rmat.csv", index_col=0)
+    similarity_matrix = pd.read_csv("https://github.com/kphanswims15/CS598_PSL_Project4/raw/refs/heads/main/S_matrix.csv", index_col=0)
     return rating_matrix, similarity_matrix
 
 def myIBCF(new_user_ratings, similarity_matrix):
