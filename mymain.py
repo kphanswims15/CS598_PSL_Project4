@@ -2,10 +2,9 @@ import streamlit as st
 from streamlit_star_rating import st_star_rating
 import pandas as pd
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
 from PIL import Image
 
-movies_titles = pd.read_csv('ml-1m\\movies.dat', sep = '::', engine = 'python',
+movies_titles = pd.read_csv('https://github.com/kphanswims15/CS598_PSL_Project4/blob/main/ml-1m/movies.dat', sep = '::', engine = 'python',
                         encoding = "ISO-8859-1", header = None)
 movies_titles.columns = ['MovieID', 'Title', 'Genres']
 
@@ -21,8 +20,8 @@ def get_movie_details(movie):
 @st.cache_data
 def load_data():
     # Load the rating matrix and similarity matrix
-    rating_matrix = pd.read_csv("I-w9Wo-HSzmUGNNHw0pCzg_bc290b0e6b3a45c19f62b1b82b1699f1_Rmat.csv", index_col=0)
-    similarity_matrix = pd.read_csv("S_matrix.csv", index_col=0)
+    rating_matrix = pd.read_csv("https://github.com/kphanswims15/CS598_PSL_Project4/blob/main/I-w9Wo-HSzmUGNNHw0pCzg_bc290b0e6b3a45c19f62b1b82b1699f1_Rmat.csv?raw=true", index_col=0)
+    similarity_matrix = pd.read_csv("https://github.com/kphanswims15/CS598_PSL_Project4/blob/main/S_matrix.csv?raw=true", index_col=0)
     return rating_matrix, similarity_matrix
 
 def myIBCF(new_user_ratings, similarity_matrix):
